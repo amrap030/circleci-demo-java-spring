@@ -31,7 +31,7 @@ public class QuoteController {
         if (author == null) {
             return ResponseEntity.badRequest().build();
         }
-        Optional<Author> authorOfQuote = authorRepository.findOneByFirstNameAndLastNameAndYearOfBirth(author.getFirstName(), author.getLastName(), author.getYearOfBirth());
+        Optional<Author> authorOfQuote = authorRepository.findByFirstNameAndLastNameAndYearOfBirth(author.getFirstName(), author.getLastName(), author.getYearOfBirth());
         if (authorOfQuote.isPresent()) {
             author = authorOfQuote.get();
         } else {

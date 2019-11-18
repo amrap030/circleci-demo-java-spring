@@ -2,7 +2,6 @@ package com.circleci.demojavaspring.repository;
 
 import com.circleci.demojavaspring.model.Author;
 import com.circleci.demojavaspring.model.Quote;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +12,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
+
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -36,7 +37,7 @@ public class AuthorRepositoryTest {
 
     @Test
     public void testFindMethod() {
-        Optional<Author> result = authorRepository.findOneByFirstNameAndLastNameAndYearOfBirth("Marcus", "Aurelius", 121);
-        Assert.assertTrue(result.isPresent());
+        Optional<Author> result = authorRepository.findByFirstNameAndLastNameAndYearOfBirth("Marcus", "Aurelius", 121);
+        assertTrue(result.isPresent());
     }
 }

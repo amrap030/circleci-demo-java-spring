@@ -7,5 +7,5 @@ import com.circleci.demojavaspring.model.Author;
 import java.util.Optional;
 
 public interface AuthorRepository extends CrudRepository<Author, Integer> {
-    Optional<Author> findOneByFirstNameAndLastNameAndYearOfBirth(String firstName, String lastName, int yearOfBirth);
+    Optional<Author> findByFirstNameAndLastNameAndYearOfBirth(String firstName, String lastName, int yearOfBirth);
 }

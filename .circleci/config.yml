@@ -1,7 +1,10 @@
 version: 2
+general:
+  branches:
+    only:
+      - maven-completed
 jobs:
   build:
-    
     working_directory: ~/circleci-demo-java-spring
 
     docker:

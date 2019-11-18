@@ -4,6 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.circleci.demojavaspring.model.Author;
 
-public interface AuthorRepository extends CrudRepository<Author, Long> {
-    
+import java.util.Optional;
+
+public interface AuthorRepository extends CrudRepository<Author, Integer> {
+    Optional<Author> findOneByFirstNameAndLastNameAndYearOfBirth(String firstName, String lastName, int yearOfBirth);
 }

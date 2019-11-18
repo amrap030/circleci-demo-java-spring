@@ -13,7 +13,8 @@ public class Quote {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer personId;
+    @ManyToOne
+    private Author author;
 
     private String quote;
 
@@ -28,4 +29,13 @@ public class Quote {
     public void setQuote(String quote) {
         this.quote = quote;
     }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
 }

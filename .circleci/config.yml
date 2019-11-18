@@ -5,11 +5,11 @@ jobs:
     working_directory: ~/circleci-demo-java-spring
 
     docker:
-      - image: circleci/openjdk:8-jdk-stretch
+      - image: circleci/openjdk:13.0.1-buster
       - image: circleci/postgres:9.6.3-alpine
         environment:
           POSTGRES_USER: root
-          POSTGRES_DB: circle_test
+          POSTGRES_DB: quotes
 
     steps:
 

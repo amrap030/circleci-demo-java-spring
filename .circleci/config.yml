@@ -30,5 +30,8 @@ jobs:
       
       - run: mvn package
 
+      - store_test_results:
+          path: target/surefire-reports
+
       - store_artifacts:
           path: target/demo-java-spring-0.0.1-SNAPSHOT.jar

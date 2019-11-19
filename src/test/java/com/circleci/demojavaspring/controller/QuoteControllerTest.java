@@ -39,26 +39,18 @@ public class QuoteControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        Author a = authorRepository.save(new Author("Marcus", "Aurelius", 121));
-        Quote q = new Quote();
-        q.setQuote("Whatever this is that I am, it is a little flesh and breath, and the ruling part.");
-        q.setAuthor(a);
-        quoteRepository.save(q);
+        //create one entry in the quote and author repositories repositories each
+
     }
 
     @Test
     public void testAddQuote() throws IOException {
-        CreateQuoteDTO dto = new CreateQuoteDTO();
-        dto.setAuthorBirthYear("121");
-        dto.setAuthorFirstName("Marcus");
-        dto.setAuthorLastName("Aurelius");
-        dto.setQuote("Begin the morning by saying to thyself, I shall meet with the busy-body, the ungrateful, arrogant, deceitful, envious, unsocial.");
+        //create new quote DTO
 
-        ResponseEntity<Quote> quoteResponseEntity = restTemplate.postForEntity("/quote", dto, Quote.class);
-        assertEquals(HttpStatus.OK, quoteResponseEntity.getStatusCode() );
+        //use restTemplate with postForEntity to send a POST request to the url
 
-        ResponseEntity<QuoteList> result = restTemplate.getForEntity("/quote", QuoteList.class);
-        assertEquals(2, result.getBody().getQuotes().size());
+        //check API returns additional quote
+
     }
 
     @After

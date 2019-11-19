@@ -28,13 +28,12 @@ public class AuthorRepositoryTest {
 
     @Before
     public void setupDB() {
-        Author a = authorRepository.save(new Author("Marcus", "Aurelius", 121));
+        //save an author to DB
     }
 
     @Test
     public void testFindMethod() {
-        Optional<Author> result = authorRepository.findByFirstNameAndLastNameAndYearOfBirth("Marcus", "Aurelius", 121);
-        assertTrue(result.isPresent());
+        //check that the author is correctly retrieved by its attributes
     }
 
     @After

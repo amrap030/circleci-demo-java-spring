@@ -1,5 +1,6 @@
 package com.circleci.demojavaspring.controller;
 
+import com.circleci.demojavaspring.model.QuoteList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,8 @@ import com.circleci.demojavaspring.model.Quote;
 import com.circleci.demojavaspring.repository.AuthorRepository;
 import com.circleci.demojavaspring.repository.QuoteRepository;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -43,4 +46,16 @@ public class QuoteController {
         q = quoteRepository.save(q);
         return ResponseEntity.ok(q);
     }
+
+    @GetMapping
+    public ResponseEntity<QuoteList> getQuotesForAuthorLastName(@RequestParam(required = false) String authorLastName) {
+        if (authorLastName == null) {
+            QuoteList allQuotes = new QuoteList();
+            quoteRepository.findAll().forEach(quote -> allQuotes.getQuotes().add(quote));
+            return ResponseEntity.ok(allQuotes);
+        }
+        List<Quote> quotes = quoteRepository.findByAuthorLastName(authorLastName);
+        return ResponseEntity.ok(new QuoteList(quotes));
+    }
+
 }

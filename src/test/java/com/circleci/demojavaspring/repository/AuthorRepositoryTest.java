@@ -2,6 +2,7 @@ package com.circleci.demojavaspring.repository;
 
 import com.circleci.demojavaspring.model.Author;
 import com.circleci.demojavaspring.model.Quote;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,23 +22,23 @@ import static org.junit.Assert.assertTrue;
 @TestPropertySource("/test.properties")
 public class AuthorRepositoryTest {
 
-    @Autowired
-    QuoteRepository quoteRepository;
+
     @Autowired
     AuthorRepository authorRepository;
 
     @Before
     public void setupDB() {
         Author a = authorRepository.save(new Author("Marcus", "Aurelius", 121));
-        Quote q = new Quote();
-        q.setQuote("Whatever this is that I am, it is a little flesh and breath, and the ruling part.");
-        q.setAuthor(a);
-        quoteRepository.save(q);
     }
 
     @Test
     public void testFindMethod() {
         Optional<Author> result = authorRepository.findByFirstNameAndLastNameAndYearOfBirth("Marcus", "Aurelius", 121);
         assertTrue(result.isPresent());
+    }
+
+    @After
+    public void tearDown() {
+        authorRepository.deleteAll();
     }
 }

@@ -50,7 +50,6 @@ jobs:
       - run: gcloud --quiet config set project ${GCP_PROJECT}
       - restore_cache:
           key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
-      - run: mvn package -DskipTests
       - run: docker build -t gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_TAG .
       - run: gcloud docker -- push gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_TAG
 

@@ -40,11 +40,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - run:
-          name: install requirements
-          command: |
-            apt update
-            apt install -qq -y gettext
+
       - run: echo ${GOOGLE_AUTH} > key.json
       - setup_remote_docker:
           version: 18.06.0-ce
@@ -55,11 +51,17 @@ jobs:
       - run: docker push gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:${VERSION}
 
   deploy:
-    working_directory: ~/circleci-demo-java-spring/deployment
+    working_directory: ~/circleci-demo-java-spring
     docker:
       - image: google/cloud-sdk
     steps:
       - checkout
+      - run:
+          name: install requirements
+          command: |
+            apt update
+            apt install -qq -y gettext
+
       - run: echo ${GOOGLE_AUTH} > key.json
       - run: gcloud auth activate-service-account --key-file key.json
       - run: gcloud --quiet config set compute/zone ${GCP_COMPUTE_ZONE}
@@ -68,7 +70,8 @@ jobs:
       - run:
           name: deploy to GKE
           command: |
-            kubectl apply -f gke/
+            envsubst < deployment/gke/app-deployment.yml
+            kubectl apply -f deployment/gke/
             kubectl rollout status deployment/quotes
 
 workflows:

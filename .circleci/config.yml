@@ -35,9 +35,13 @@ jobs:
 
     steps:
       - checkout
-      - run: apt-get install -qq -y python2
-      - run: apt-get install -qq -y gettext
-      - run: curl -sSL https://sdk.cloud.google.com | bash
+      - run:
+        name: install requirements
+        command: |
+          apt update
+          apt install -qq -y python2
+          apt install -qq -y gettext
+          curl -sSL https://sdk.cloud.google.com | bash
       - run: echo ${GOOGLE_AUTH} > key.json
       - run: gcloud auth activate-service-account --key-file key.json
       - run: gcloud --quiet config set project ${GCP_PROJECT}

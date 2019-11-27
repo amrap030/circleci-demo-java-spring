@@ -77,6 +77,8 @@ workflows:
               ignore:
                 - master
                 - /.*-demo/
+            tags:
+              only: /^1.*/
       - create-push-image:
           requires:
             - test

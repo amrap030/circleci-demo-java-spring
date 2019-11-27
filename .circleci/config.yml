@@ -31,11 +31,12 @@ jobs:
 
   create-push-image:
     docker:
-      - image: circleci/openjdk:13.0.1-buster
+      - image: openjdk:13.0.1-jdk-buster
 
     steps:
       - checkout
-      - run: apt-get install python2
+      - run: apt-get install -qq -y python2
+      - run: apt-get install -qq -y gettext
       - run: curl -sSL https://sdk.cloud.google.com | bash
       - run: echo ${GOOGLE_AUTH} > key.json
       - run: gcloud auth activate-service-account --key-file key.json

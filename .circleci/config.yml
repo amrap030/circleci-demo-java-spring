@@ -1,10 +1,6 @@
 version: 2
-general:
-  branches:
-    only:
-      - maven-completed
 jobs:
-  build:
+  test:
     working_directory: ~/circleci-demo-java-spring
 
     docker:
@@ -28,10 +24,59 @@ jobs:
             - ~/.m2
           key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
       
-      - run: mvn package
+      - run: mvn test
       
       - store_test_results:
           path: target/surefire-reports
-      
-      - store_artifacts:
-          path: target/demo-java-spring-0.0.1-SNAPSHOT.jar
+
+  create-push-image:
+    machine: true
+    steps:
+      - checkout
+      - run: echo ${GOOGLE_AUTH} > key.json
+      - run: gcloud auth activate-service-account --key-file key.json
+      - run: gcloud --quiet config set project ${GCP_PROJECT}
+      - restore_cache:
+          key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
+      - run: mvn package -DskipTests
+      - run: docker build -t gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_TAG .
+      - run: gcloud docker -- push gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_TAG
+
+  deploy:
+    working_directory: ~/circleci-demo-java-spring/deployment
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - checkout
+      - run: echo ${GOOGLE_AUTH} > key.json
+      - run: gcloud auth activate-service-account --key-file key.json
+      - run: gcloud --quiet config set project ${GCP_PROJECT}
+      - run: gcloud --quiet container clusters get-credentials ${GCP_CLUSTER}
+      - run:
+        name: deploy to GKE
+        command: |
+          kubectl apply -f gke/
+          kubectl rollout status deployment/quotes
+
+workflows:
+  version: 2
+  test-build-deploy:
+    jobs:
+      - test:
+          filters:
+            branches:
+              ignore:
+                - master
+                - /.*-demo/
+      - create-push-image:
+          requires:
+            - test
+          filters:
+            tags:
+              only: /^1.*/
+      - deploy:
+          requires:
+            - create-push-image
+          filters:
+            tags:
+              only: /^1.*/

@@ -1,0 +1,25 @@
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quotes
+  labels:
+    app: quotes
+spec:
+  type: NodePort
+  ports:
+    - port: 9000
+  selector:
+    app: quotes
+
+---
+apiVersion: "extensions/v1beta1"
+kind: "Ingress"
+metadata:
+  name: "quotes-api"
+  namespace: "default"
+spec:
+  backend:
+    serviceName: "quotes"
+    servicePort: 9000

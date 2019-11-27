@@ -30,7 +30,8 @@ jobs:
           path: target/surefire-reports
 
   create-push-image:
-    machine: true
+    docker:
+      - image: circleci/openjdk:13.0.1-buster
     steps:
       - checkout
       - run: echo ${GOOGLE_AUTH} > key.json

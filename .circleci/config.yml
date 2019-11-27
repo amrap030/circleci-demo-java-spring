@@ -46,6 +46,7 @@ jobs:
             apt update
             apt install -qq -y gettext
       - run: echo ${GOOGLE_AUTH} > key.json
+      - setup_remote_docker
       - run: gcloud auth activate-service-account --key-file key.json
       - run: gcloud --quiet config set project ${GCP_PROJECT}
       - run: docker build -t gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:${VERSION} .

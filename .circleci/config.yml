@@ -46,11 +46,13 @@ jobs:
             apt update
             apt install -qq -y gettext
       - run: echo ${GOOGLE_AUTH} > key.json
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 18.06.0-ce
       - run: gcloud auth activate-service-account --key-file key.json
+      - run: gcloud auth configure-docker
       - run: gcloud --quiet config set project ${GCP_PROJECT}
       - run: docker build -t gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:${VERSION} .
-      - run: gcloud docker -- push gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:${VERSION}
+      - run: docker push gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:${VERSION}
 
   deploy:
     working_directory: ~/circleci-demo-java-spring/deployment

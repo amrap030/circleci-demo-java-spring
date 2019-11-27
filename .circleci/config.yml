@@ -48,10 +48,8 @@ jobs:
       - run: echo ${GOOGLE_AUTH} > key.json
       - run: gcloud auth activate-service-account --key-file key.json
       - run: gcloud --quiet config set project ${GCP_PROJECT}
-      - restore_cache:
-          key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
-      - run: docker build -t gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_TAG .
-      - run: gcloud docker -- push gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:$CIRCLE_TAG
+      - run: docker build -t gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:${CIRCLE_TAG} .
+      - run: gcloud docker -- push gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:{$CIRCLE_TAG}
 
   deploy:
     working_directory: ~/circleci-demo-java-spring/deployment

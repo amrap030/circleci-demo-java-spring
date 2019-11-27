@@ -62,6 +62,7 @@ jobs:
       - checkout
       - run: echo ${GOOGLE_AUTH} > key.json
       - run: gcloud auth activate-service-account --key-file key.json
+      - run: gcloud --quiet config set compute/zone ${GCP_COMPUTE_ZONE}
       - run: gcloud --quiet config set project ${GCP_PROJECT}
       - run: gcloud --quiet container clusters get-credentials ${GCP_CLUSTER}
       - run:

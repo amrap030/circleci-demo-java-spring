@@ -48,8 +48,8 @@ jobs:
       - run: echo ${GOOGLE_AUTH} > key.json
       - run: gcloud auth activate-service-account --key-file key.json
       - run: gcloud --quiet config set project ${GCP_PROJECT}
-      - run: docker build -t gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:${CIRCLE_TAG} .
-      - run: gcloud docker -- push gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:{$CIRCLE_TAG}
+      - run: docker build -t gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:${VERSION} .
+      - run: gcloud docker -- push gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:${VERSION}
 
   deploy:
     working_directory: ~/circleci-demo-java-spring/deployment
@@ -77,17 +77,9 @@ workflows:
               ignore:
                 - master
                 - /.*-demo/
-            tags:
-              only: /^1.*/
       - create-push-image:
           requires:
             - test
-          filters:
-            tags:
-              only: /^1.*/
       - deploy:
           requires:
             - create-push-image
-          filters:
-            tags:
-              only: /^1.*/

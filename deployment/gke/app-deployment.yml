@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: quotes-app
-          image: gcr.io/$GCP_PROJECT/$IMAGE_NAME:$CIRCLE_TAG
+          image: gcr.io/$GCP_PROJECT/$IMAGE_NAME:$VERSION
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 9000

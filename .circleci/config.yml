@@ -11,7 +11,6 @@ jobs:
           POSTGRES_DB: quotes
 
     steps:
-
       - checkout
 
       - restore_cache:
@@ -24,26 +23,28 @@ jobs:
             - ~/.m2
           key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
       
-      - run: mvn test
+      - run: mvn package
       
       - store_test_results:
           path: target/surefire-reports
 
+      - persist_to_workspace:
+          root: .
+          paths: target/demo-java-spring-1.0-SNAPSHOT.jar
+
   create-push-image:
     docker:
-      - image: openjdk:13.0.1-jdk-buster
+      - image: google/cloud-sdk
 
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: install requirements
           command: |
             apt update
-            apt install -qq -y python2
             apt install -qq -y gettext
-            wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-272.0.0-linux-x86_64.tar.gz
-            tar -xzf google-cloud-sdk-272.0.0-linux-x86_64.tar.gz
-            ./google-cloud-sdk/install.sh --disable-prompts
       - run: echo ${GOOGLE_AUTH} > key.json
       - run: gcloud auth activate-service-account --key-file key.json
       - run: gcloud --quiet config set project ${GCP_PROJECT}

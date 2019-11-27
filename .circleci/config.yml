@@ -32,9 +32,11 @@ jobs:
   create-push-image:
     docker:
       - image: circleci/openjdk:13.0.1-buster
-      - image: google/cloud-sdk
+
     steps:
       - checkout
+      - run: apt-get install python2
+      - run: curl -sSL https://sdk.cloud.google.com | bash
       - run: echo ${GOOGLE_AUTH} > key.json
       - run: gcloud auth activate-service-account --key-file key.json
       - run: gcloud --quiet config set project ${GCP_PROJECT}

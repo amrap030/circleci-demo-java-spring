@@ -70,7 +70,7 @@ jobs:
       - run:
           name: deploy to GKE
           command: |
-            envsubst < deployment/gke/app-deployment.yml
+            envsubst < deployment/gke/app-deployment.yml > deployment/app-deployment.yml
             kubectl apply -f deployment/gke/
             kubectl rollout status deployment/quotes
 

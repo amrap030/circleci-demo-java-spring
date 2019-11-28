@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class VersionController {
 
     private final static String API_VERSION = System.getenv("VERSION");
+    
 
     @GetMapping
     public ResponseEntity<String> getVersion() {
